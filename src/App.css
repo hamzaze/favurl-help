@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,900');
+
+body{
+  background-color: #f2f2f2;
+  font-family: 'Roboto', sans-serif;
+}
+
+.paddTop10{
+  padding-top: 1rem;
+}
+
+.paddTop20{
+  padding-top: 2rem;
+}
+
+.paddTopBottom20{
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.inline-block{
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.paddLeftRight5{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.size18{
+  font-size: 18px;
+}
+
+.size22{
+  font-size: 22px;
+}
+
+.btn-xs{
+  padding: 2px 7px;
+  font-size: 0.8rem;
+}
+
+.text-white-transparent{
+  color: rgba(255,255,255, 0.5);
+}
+
+.text-darkgray{
+  color: #505050;
+}
+
+.text-lightgray{
+  color: #999;
+}
+
+.text-hot{
+  color: #f90;
+}
+
+.bg-hot{
+  background-color: #f90;
+}
+
+.text-bigger, .text-bigger h1{
+  font-weight: 100;
+}
+
+.text-large{
+  font-size: 125%;
+}
+
+hr{
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+h1, .h1{
+  font-size: 2rem;
+}
+
+.noFloat{
+  clear: both
+}
+
+textarea.form-control{
+  height: 150px;
+}
+
+.disabled{
+  cursor: not-allowed;
+}
+
+.list-group-item:hover{
+  background-color: rgba(0, 123, 255, 0.1);
+}
