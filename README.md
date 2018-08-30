@@ -16,3 +16,13 @@ cd favurl-help
 npm install
 npm start
 ```
+
+### Troubleshoting
+
+Testing it locally you might need to add Google Extension to get right Broken links results.
+Otherwise it is going to return all links as broken.
+The reason is:
+
+```
+Allow-Control-Allow-Origin: *
+```
