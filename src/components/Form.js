@@ -48,7 +48,7 @@ class Form extends Component {
 
   render() {
     const { errors } = this.state;
-    const  props = this.props;
+    const  { props } = this;
     return (
       <div>
         { props.showButton &&

@@ -18,8 +18,9 @@ class ItemList extends Component {
         const storageList = JSON.parse(localStorage.getItem("list"));
         var list = this.props.list;
         const currentIndex = list.findIndex(item => item.id === id);
+        
         if(currentIndex !== -1) {
-            delete list[currentIndex];
+            list.splice(currentIndex, 1);
             this.setState({ 
                 list
             },
@@ -32,9 +33,26 @@ class ItemList extends Component {
         }
     }
 
+    renderList( props ) {
+        return props.list && props.list.length > 0 ?
+            <div>
+                <div className="d-flex">
+                    <div className="mr-auto p-2 bd-highlight">
+                        <button className="btn-link" onClick={this.sortByName}>Sort by Name</button>
+                    </div>
+                </div>   
+                <div className="list-group">
+                    {props.list.map(item => <Item removeItem={this.removeItem} goToURL={this.goToURL} key={item.id} {...item} />)}
+                </div>
+            </div>
+          : <div className="list-group paddTop10">
+              <div className="list-group-item list-group-item-info">Your list is empty</div>
+            </div>
+    }
+
     goToURL(id) {
         const storageList = JSON.parse(localStorage.getItem("list"));
-        const list = this.props.list;
+        const { list } = this.props;
         const currentIndex = list.findIndex(item => item.id === id);
         if(currentIndex !== -1) {
           const item = {...list[currentIndex]};
@@ -64,29 +82,18 @@ class ItemList extends Component {
       }
 
     componentDidMount() {
-        const list = this.props.list;
+        const  { list } = this.props;
         this.setState( {
           list: list
         });
     }  
 
   render() {
-      const props = this.props;
+      const { props } = this;
     return (
         <div>
-            {props.list && props.list.length > 0 &&
-                <div>
-                    <div className="d-flex">
-                        <div className="mr-auto p-2 bd-highlight">
-                            <button className="btn-link" onClick={this.sortByName}>Sort by Name</button>
-                        </div>
-                        </div>   
-                    <div className="list-group">
-                        {props.list.map(item => <Item removeItem={this.removeItem} goToURL={this.goToURL} key={item.id} {...item} />)}
-                    </div>
-                </div>
-            }
-      </div>
+           { this.renderList( props )}
+        </div>
     )
   }
 }

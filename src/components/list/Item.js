@@ -3,7 +3,7 @@ import { customDate, customTime } from '../../helpers';
 
 class Item extends Component{
     render() {
-        const props = this.props;
+        const { props } = this;
         var crdate = customDate(props.crdate);
         var crtime = customTime(props.crdate);
         return (
