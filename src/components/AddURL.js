@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Form from './Form';
-import TopMenu from './TopMenu';
+import { Modal, Button } from 'react-bootstrap';
 
 
 class AddURL extends Component {
@@ -8,7 +8,8 @@ class AddURL extends Component {
     super(props);
     this.state = {
       list: [],
-      showButton: false
+      showButton: false,
+      showModal: false
     }
     this.hideButton = this.hideButton.bind(this);
   }
@@ -23,34 +24,35 @@ class AddURL extends Component {
     this.setState({
       showButton: true
     });
-    var list = JSON.parse(localStorage.getItem("list"));
-    if(list === null) {
-      list = this.state.list;
-    }
-
-    list.length > 0 ? list.unshift(urlInfo) : list.push(urlInfo);
-
-    this.setState({
-      list
-    }, () => { 
-      localStorage.setItem("list", JSON.stringify(list));
-      localStorage.setItem("newItem", "");
-    }
-  );
+    this.props.addNewURL(urlInfo);
   }
 
+  componentDidMount() {
+    const list = JSON.parse(localStorage.getItem("list"));
+    this.setState( {
+      list
+    });
+}
+
   render() {
+    const { props } = this;
     return (
       <div>
-      <TopMenu />
-      <div className="container paddTop20">
-        <div className="row">
-          <div className="col-lg-6 col-md-6 offset-lg-3 offset-md-3">
-            <h2 className="text-center paddTopBottom20 text-darkgray">Add URL</h2>
+        <Modal show={props.showModal} onHide={props.handleToggleModal} bsSize="large">
+          <Modal.Header>
+            <Button className="close" onClick={props.handleToggleModal}>
+              <span aria-hidden="true">×</span>
+              <span className="sr-only">Close</span>
+            </Button>
+            <Modal.Title>Add URL</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <Form onSubmit={this.addNewURL} showButton={this.state.showButton} hideButton={this.hideButton} />
-          </div>
-        </div>
-      </div>
+          </Modal.Body>
+          <Modal.Footer>
+            
+          </Modal.Footer>
+        </Modal>
       </div>
     )
   }

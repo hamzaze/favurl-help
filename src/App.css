@@ -93,3 +93,29 @@ textarea.form-control{
 .list-group-item:hover{
   background-color: rgba(0, 123, 255, 0.1);
 }
+
+.modal-backdrop.show, .modal-backdrop.in {
+  opacity: .5;
+}
+
+[role="dialog"].fade.in {
+  opacity: 1;
+}
+
+.modal.fade.in .modal-dialog {
+  -webkit-transform: translate(0,0);
+  -ms-transform: translate(0,0);
+  transform: translate(0,0);
+}
+
+.modal-header{
+  display: block;
+}
+
+.modal-title{
+  text-align: center;
+}
+
+.modal-body{
+  padding: 1rem 2rem;
+}

@@ -48,25 +48,15 @@ class Form extends Component {
 
   render() {
     const { errors } = this.state;
-    const  { props } = this;
     return (
       <div>
-        { props.showButton &&
-          <div className="alert alert-success" role="alert">
-            <button onClick={this.onClick} type="button" className="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            
-            <strong>Well done!</strong> Your URL is successfully submitted.
-          </div>
-        }
           <form onSubmit={this.onSubmit}>
             <div className="form-group">
                 <input type="url"
                 value={this.state.url}
                 name="url"
                 placeholder="Write a valid URL..."
-                className={classnames('form-control form-control-lg', {
+                className={classnames('form-control form-control-md', {
                     'is-invalid': errors.url
                 })}
                 onChange={this.onChange}
@@ -79,22 +69,13 @@ class Form extends Component {
                 value={this.state.name}
                 name="name"
                 placeholder="Your URL's name..."
-                className={classnames('form-control form-control-lg', {
+                className={classnames('form-control form-control-md', {
                     'is-invalid': errors.name
                 })}
                 onChange={this.onChange}
                 required="required"
                 />
                 {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
-              </div>
-              <div className="form-group">
-                <textarea
-                value={this.state.description}
-                name="description"
-                className="form-control"
-                placeholder="Add some description..."
-                onChange={this.onChange}
-                />
               </div>
               <div className="form-group text-center text-center">
                   <div className="row">

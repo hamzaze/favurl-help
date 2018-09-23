@@ -12,11 +12,26 @@ class ItemList extends Component {
         this.removeItem = this.removeItem.bind(this);
         this.goToURL = this.goToURL.bind(this);
         this.sortByName = this.sortByName.bind(this);
+        this.addNewURL = this.addNewURL.bind(this);
+    }
+
+    addNewURL(newItem){
+        var list = this.state.list;
+
+        list.length > 0 ? list.unshift(newItem) : list.push(newItem);
+        //Uncomment line below to hide a modal on a form submittion
+        //this.props.handleToggleModal();
+        this.setState({
+            list
+            }, () => { 
+                localStorage.setItem("list", JSON.stringify(list));
+            }
+        );
     }
 
     removeItem(id) {
         const storageList = JSON.parse(localStorage.getItem("list"));
-        var list = this.props.list;
+        var list = this.state.list;
         const currentIndex = list.findIndex(item => item.id === id);
         
         if(currentIndex !== -1) {
@@ -28,13 +43,16 @@ class ItemList extends Component {
                 //Remove it from the storageList
                 const updatedStorageList = storageList.filter(item => item.id !== id);
                 localStorage.setItem("list", JSON.stringify(updatedStorageList));
+                const list = JSON.parse(localStorage.getItem("list"));
+                this.props.updateList(list);
                 } 
             );
         }
     }
 
-    renderList( props ) {
-        return props.list && props.list.length > 0 ?
+    renderList( ) {
+        const { props } = this;
+        return this.state.list && this.state.list.length ?
             <div>
                 <div className="d-flex">
                     <div className="mr-auto p-2 bd-highlight">
@@ -42,17 +60,17 @@ class ItemList extends Component {
                     </div>
                 </div>   
                 <div className="list-group">
-                    {props.list.map(item => <Item removeItem={this.removeItem} goToURL={this.goToURL} key={item.id} {...item} />)}
+                    {this.state.list.map(item => <Item removeItem={this.removeItem} goToURL={this.goToURL} key={item.id} {...item} />)}
                 </div>
             </div>
-          : <div className="list-group paddTop10">
-              <div className="list-group-item list-group-item-info">Your list is empty</div>
+          : !props.hideList && <div className="list-group paddTop10">
+              <div className="list-group-item list-group-item-info">Your list is empty. Please add URL</div>
             </div>
     }
 
     goToURL(id) {
         const storageList = JSON.parse(localStorage.getItem("list"));
-        const { list } = this.props;
+        const list = this.state.list;
         const currentIndex = list.findIndex(item => item.id === id);
         if(currentIndex !== -1) {
           const item = {...list[currentIndex]};
@@ -68,6 +86,8 @@ class ItemList extends Component {
                 storageList[currentIndex] = item;
             }
             localStorage.setItem("list", JSON.stringify(storageList.sort(sortByDate())));
+            const list = JSON.parse(localStorage.getItem("list"));
+            this.props.updateList(list);
             window.open(item.url, '_blank');
            });
         }
@@ -75,24 +95,41 @@ class ItemList extends Component {
 
     sortByName() {
          this.setState({
-          list: this.props.list.sort(sortByName(this.state.sortBy)),
+          list: this.state.list.sort(sortByName(this.state.sortBy)),
           sortBy: this.state.sortBy === 'asc' ? 'desc' : 'asc'
         });
         
       }
 
-    componentDidMount() {
-        const  { list } = this.props;
+    componentDidUpdate(prevProps){
+        if(prevProps.newItem !== this.props.newItem) {
+            this.addNewURL(this.props.newItem);
+        }
+        if(prevProps.list !== this.props.list) {
+            const list = this.props.list;
+            this.setState( {
+                list
+            });
+        }
+        if(prevProps.newList !== this.props.newList) {
+            const list = this.props.newList;
+            this.setState( {
+                list
+            });
+        }
+    }  
+
+    componentDidMount( ) {
+        const list = this.props.list ? this.props.list : JSON.parse(localStorage.getItem("list"));
         this.setState( {
-          list: list
+          list
         });
     }  
 
   render() {
-      const { props } = this;
     return (
         <div>
-           { this.renderList( props )}
+           { this.renderList()}
         </div>
     )
   }

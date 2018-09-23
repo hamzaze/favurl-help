@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ItemList from './ItemList';
-import TopMenu from './TopMenu';
+import { Modal, Button } from 'react-bootstrap';
 const linkCheck = require('link-check');
 var asyncFilter = require('array-async-filter');
+
 
 class BrokenURLs extends Component {
   constructor(props) {
@@ -10,13 +11,15 @@ class BrokenURLs extends Component {
     this.state = {
       list: [],
       sortBy: 'asc',
-      btnClassName: 'btn btn-primary btn-block',
+      btnClassName: 'btn btn-primary btn-sm',
       disabled: false,
       visible: 'd-none',
-      hideList: true
+      hideList: true,
+      showModal: false
     };
 
     this.findBrokenLinks = this.findBrokenLinks.bind(this);
+    this.updateList = this.updateList.bind(this);
   }
 
   findBrokenLinks() {
@@ -26,7 +29,7 @@ class BrokenURLs extends Component {
     }
     this.disableButton();
     let brokenList = [];
-    const list = JSON.parse(localStorage.getItem("list"));
+    var list = JSON.parse(localStorage.getItem("list"));
 
     var self = this;
     asyncFilter(
@@ -45,7 +48,8 @@ class BrokenURLs extends Component {
       function (err, res) {
         brokenList = res;
         self.setState({
-          list: brokenList
+          list: brokenList,
+          hideList: !self.state.hideList
         }, () => {
           self.enableButton();
       });
@@ -55,7 +59,7 @@ class BrokenURLs extends Component {
 
 disableButton() {
   this.setState({
-    btnClassName: 'btn btn-secondary btn-block disabled',
+    btnClassName: 'btn btn-secondary btn-sm disabled',
     disabled: true,
     list: [],
     visible: ''
@@ -64,41 +68,41 @@ disableButton() {
 
 enableButton() {
   this.setState({
-    btnClassName: 'btn btn-primary btn-block',
+    btnClassName: 'btn btn-primary btn-sm',
     disabled: false,
     visible: 'd-none'
   });
 }
 
+updateList(list) {
+  this.props.updateList(list);
+}
+
   render() {
-    var isVisible = this.state.visible;
+    const { props } = this;
     return (
-      <div>
-        <TopMenu />
-        <div className="container paddTop20">
-          <div className="row">
-            <div className="col-lg-2 col-md-4 offset-lg-5 offset-md-4">
-              <div className="form-group text-center text-center">
-                <button type="button" 
+       <div>
+        <Modal show={props.showModal} onHide={props.handleToggleModal} bsSize="large">
+          <Modal.Header>
+            <Button className="close" onClick={props.handleToggleModal}>
+              <span aria-hidden="true">×</span>
+              <span className="sr-only">Close</span>
+            </Button>
+            <Modal.Title>Broken URLs</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <div className="text-center paddTopBotom10">
+            <button type="button" 
                 className={this.state.btnClassName}
                 onClick={this.findBrokenLinks}
-                >
-                    Test
-                </button>
-                    
-              </div>
+                >Find Broken URLs</button>
             </div>
-          </div>
-          
-          <div className={isVisible}>
-              <div className="text-center text-small">
-              Searching broken links from your favorite URL list might take some time and make the button disabled.<br />
-                Please be patient while they're loading.
-              </div>
-            </div>
-            <ItemList list={this.state.list} />
-          
-        </div>
+            <ItemList hideList={this.state.hideList} list={this.state.list} updateList={this.updateList}/>
+          </Modal.Body>
+          <Modal.Footer>
+            
+          </Modal.Footer>
+        </Modal>
       </div>
     )
   }
