@@ -16,8 +16,9 @@ class ItemList extends Component {
     }
 
     addNewURL(newItem){
-        var list = this.state.list;
+        var list = this.state.list ? this.state.list:[];
 
+        console.log("list", list);
         list.length > 0 ? list.unshift(newItem) : list.push(newItem);
         //Uncomment line below to hide a modal on a form submittion
         //this.props.handleToggleModal();

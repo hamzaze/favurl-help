@@ -12,7 +12,8 @@ class Home extends Component {
       showModal: false,
       showModal1: false,
       newItem: {},
-      newList: []
+      newList: [],
+      list: []
     };
     this.toggleAddURL = this.toggleAddURL.bind(this);
     this.toggleBrokenLinks = this.toggleBrokenLinks.bind(this);
